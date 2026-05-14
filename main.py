@@ -33,6 +33,20 @@ def get_all_calls():
         logger.error(f"Error occurred while fetching all calls: {e}")
         return _error_response("An error occurred while fetching calls.", 500)
 
+@app.route("/calls/archived", methods=["GET"])
+def get_all_archived_calls():
+
+    try:
+        calls, error = call_service.get_all_archived_calls()
+
+        if error:
+            return _error_response(error, 500)
+        return _success_response({"calls": calls})
+    
+    except Exception as e:
+        logger.error(f"Error occurred while fetching archived calls: {e}")
+        return _error_response("An error occurred while fetching archived calls.", 500)
+    
 
 @app.route("/calls/<call_id>", methods=["GET"])
 def get_call_by_id(call_id):

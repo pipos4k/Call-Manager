@@ -15,7 +15,19 @@ def get_all_calls() -> Tuple[List[Dict[str, Any]], Optional[str]]:
     except Exception as e:
         logger.error(f"Error occurred while fetching all calls: {e}")
         return [], "An error occurred while fetching calls."
+
+
+def get_all_archived_calls() -> Tuple[List[Dict[str, Any]], Optional[str]]:
+
+    try:
+        calls = repo.get_all_archived_calls()
+        return calls, None
+
+    except Exception as e:
+        logger.error(f"Error occurred while fetching archived calls: {e}")
+        return [], "An error occurred while fetching archived calls."
     
+
 def get_call_by_id(call_id: str) -> Optional[Dict[str, Any]]:
 
     try:

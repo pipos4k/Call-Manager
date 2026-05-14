@@ -16,6 +16,17 @@ def get_all_calls() -> List[Dict[str, Any]]:
         return []
     
 
+def get_all_archived_calls() -> List[Dict[str, Any]]:
+
+    try: 
+        calls = Call.query.filter_by(is_archived=True)
+        return [call.to_dict() for call in calls.all()]
+
+    except Exception as e:
+        logger.error(f"Error occurred while fetching archived calls: {e}")
+        return []
+    
+
 def get_call_by_id(call_id: str) -> Optional[Dict[str, Any]]:
 
     try:

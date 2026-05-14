@@ -78,6 +78,36 @@ def archive_call(call_id):
         return _error_response("An error occurred while archiving the call.", 500)
 
 
+@app.route("/calls/<call_id>/unarchive", methods=["PATCH"])
+def unarchive_call(call_id):
+
+    try:
+        success = call_service.unarchive_call(call_id)
+
+        if not success:
+            return _error_response("Failed to unarchive call.", 404)
+        return _success_response({"message": "Call unarchived successfully."})
+
+    except Exception as e:
+        logger.error(f"Error occurred while unarchiving call with ID {call_id}: {e}")
+        return _error_response("An error occurred while unarchiving the call.", 500)
+    
+
+@app.route("/calls/<call_id>", methods=["DELETE"])
+def delete_call(call_id):
+
+    try:
+        success = call_service.delete_call(call_id)
+
+        if not success:
+            return _error_response("Failed to delete call.", 404)
+        return _success_response({"message": "Call deleted successfully."})
+
+    except Exception as e:
+        logger.error(f"Error occurred while deleting call with ID {call_id}: {e}")
+        return _error_response("An error occurred while deleting the call.", 500)
+    
+
 def _success_response(data, status_code: int = 200):
 
     return jsonify({"success": True, **data}), status_code

@@ -1,0 +1,5 @@
+Flask==3.0.0
+psycopg2-binary==2.9.9
+Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.0.23
+faker==18.3.0 # Generate fake data for testing

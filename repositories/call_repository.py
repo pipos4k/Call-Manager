@@ -37,6 +37,7 @@ def get_call_by_id(call_id: str) -> Optional[Dict[str, Any]]:
         logger.error(f"Error occurred while fetching call by ID {call_id}: {e}")
         return None
 
+
 def archive_call(call_id: str) -> bool:
 
     try:

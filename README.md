@@ -20,12 +20,21 @@ Run the application:
 
 The API will be available at http://localhost:8080.
 ### Endpoints:
-
+#### For Calls:
     GET /calls - Get all calls that are not archived.
+
+    GET /calls/archived - Get all calls that are archived.
 
     GET /calls/<callId> - Get a specific call by ID.
 
-    PUT /calls/<callId>/archive - Archive a call.
+    PATCH /calls/<callId>/archive - Archive a call.
+
+    PATCH /calls/<callId>/unarchive - Unarchive a call.
+
+    DELETE /calls/<call_id> - Delete a call.
+
+#### For Notes:
+    POST /calls/<call_id>/notes - Add a note to a call.
 
 #### About
 This is a lightweight backend service for logging and managing voice calls, including note-taking capabilities and call archiving.

@@ -16,6 +16,17 @@ def get_all_calls() -> List[Dict[str, Any]]:
         return []
     
 
+def get_all_archived_calls() -> List[Dict[str, Any]]:
+
+    try: 
+        calls = Call.query.filter_by(is_archived=True)
+        return [call.to_dict() for call in calls.all()]
+
+    except Exception as e:
+        logger.error(f"Error occurred while fetching archived calls: {e}")
+        return []
+    
+
 def get_call_by_id(call_id: str) -> Optional[Dict[str, Any]]:
 
     try:
@@ -25,6 +36,7 @@ def get_call_by_id(call_id: str) -> Optional[Dict[str, Any]]:
     except Exception as e:
         logger.error(f"Error occurred while fetching call by ID {call_id}: {e}")
         return None
+
 
 def archive_call(call_id: str) -> bool:
 
@@ -45,3 +57,41 @@ def archive_call(call_id: str) -> bool:
         logger.error(f"Error occurred while archiving call with ID {call_id}: {e}")
         return False
     
+def unarchive_call(call_id: str) -> bool:
+
+    try:
+        call = Call.query.filter_by(call_id=call_id).first()
+        if not call:
+            logger.warning(f"Call with ID {call_id} not found for unarchiving.")
+            return False
+        
+        call.is_archived = False
+
+        db.session.commit()
+        logger.info(f"Call with ID {call_id} unarchived successfully.")
+        return True
+
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error occurred while unarchiving call with ID {call_id}: {e}")
+        return False
+    
+
+def delete_call(call_id: str) -> bool:
+
+    try:
+        call = Call.query.filter_by(call_id=call_id).first()
+        if not call:
+            logger.warning(f"Call with ID {call_id} not found for deletion.")
+            return False
+        
+        db.session.delete(call)
+        db.session.commit()
+        logger.info(f"Call with ID {call_id} deleted successfully.")
+        return True
+
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error occurred while deleting call with ID {call_id}: {e}")
+        return False
+

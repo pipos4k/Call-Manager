@@ -7,7 +7,7 @@ You will need Docker and Docker Compose installed.
 
 Clone the repository
 ```
-git clone https://github.com/pipos4k/CallManager.git
+git clone https://github.com/pipos4k/Call-Manager.git
 cd CallManager
 ```
 Setup your environment:

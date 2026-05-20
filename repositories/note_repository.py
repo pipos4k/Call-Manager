@@ -5,20 +5,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def add_note_to_db(note_id: str,
-                     content: str,
+def add_note_to_db(content: str,
                      call_id: str,
-                     created_at) -> Optional[Dict[str, Any]]: 
+                    ) -> Optional[Dict[str, Any]]: 
 
     try:
-        note = Notes(note_id= note_id,
-                    content= content,
+        note = Notes(content= content,
                     call_id= call_id,
-                    created_at= created_at)
-
+                    )
         db.session.add(note)
         db.session.commit()
-        logger.info(f"Note with ID {note_id} added to call with ID {call_id} successfully.")
+        logger.info(f"Note added to call with ID {call_id} successfully.")
         return note.to_dict()
     
     except Exception as e:

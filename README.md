@@ -1,5 +1,5 @@
 # CallManager
-A simple Flask API for managing call logs and notes. This project uses PostgreSQL and is built to run entirely in Docker.
+A Flask API for managing call logs and notes. This project uses PostgreSQL and is built to run entirely in Docker.
 
 ### Getting Started
 
@@ -19,6 +19,19 @@ Run the application:
 - The dummy builder will create some data automatically. 
 
 The API will be available at http://localhost:8080.
+
+### Testing
+I've writter some unit tests to verify the core features of the API and catch any bugs early on.
+- **Framework:** `pytest`
+
+To run the test:
+```
+python -m venv venv
+source venv/bin/activate 
+pip install -r requirments.txt
+python -m pytest
+```
+
 ### Endpoints:
 #### For Calls:
     GET /calls - Get all calls that are not archived.

@@ -27,7 +27,7 @@ def get_all_calls():
 
         if error:
             return _error_response(error, 500)
-        return _success_response({"calls": calls})
+        return _success_response({"calls": calls}, 200)
     
     except Exception as e:
         logger.error(f"Error occurred while fetching all calls: {e}")
@@ -41,7 +41,7 @@ def get_all_archived_calls():
 
         if error:
             return _error_response(error, 500)
-        return _success_response({"calls": calls})
+        return _success_response({"calls": calls}, 200)
     
     except Exception as e:
         logger.error(f"Error occurred while fetching archived calls: {e}")
@@ -52,11 +52,11 @@ def get_all_archived_calls():
 def get_call_by_id(call_id):
 
     try:
-        call = call_service.get_call_by_id(call_id)
+        call, error = call_service.get_call_by_id(call_id)
 
-        if not call:
-            return _error_response("Call not found.", 404)
-        return _success_response({"call": call})
+        if error:
+            return _error_response(error, 404)
+        return _success_response({"call": call}, 200)
 
     except Exception as e:
         logger.error(f"Error occurred while fetching call by ID {call_id}: {e}")
@@ -67,20 +67,23 @@ def get_call_by_id(call_id):
 def add_note_to_call(call_id):
 
     try:
-        call_id = call_id
+        if not call_service.get_call_by_id(call_id):
+            return _error_response("Call does not exist.", 404)
 
         data = request.get_json()
         if not data:
             return _error_response("Invalid JSON body.", 400)
 
         content = data.get("content")
+        if not content:
+            return _error_response("Missing 'content' field in request body.", 400)
 
-        note = note_service.add_note_service(
+        note, error = note_service.add_note_service(
             content, 
             call_id)
 
         if not note:
-            return _error_response("Failed to add note to call. Call or Note may not exist.", 404)
+            return _error_response(error, 404)
         return _success_response({"note": note}, 201)
 
     except Exception as e:
@@ -92,11 +95,11 @@ def add_note_to_call(call_id):
 def archive_call(call_id):
 
     try:
-        success = call_service.archive_call(call_id)
+        success, error = call_service.archive_call(call_id)
 
         if not success:
-            return _error_response("Failed to archive call.", 404)
-        return _success_response({"message": "Call archived successfully."})
+            return _error_response(error, 404)
+        return _success_response({"message": "Call archived successfully."}, 200)
 
     except Exception as e:
         logger.error(f"Error occurred while archiving call with ID {call_id}: {e}")
@@ -107,11 +110,11 @@ def archive_call(call_id):
 def unarchive_call(call_id):
 
     try:
-        success = call_service.unarchive_call(call_id)
+        success, error = call_service.unarchive_call(call_id)
 
         if not success:
-            return _error_response("Failed to unarchive call.", 404)
-        return _success_response({"message": "Call unarchived successfully."})
+            return _error_response(error, 404)
+        return _success_response({"message": "Call unarchived successfully."}, 200)
 
     except Exception as e:
         logger.error(f"Error occurred while unarchiving call with ID {call_id}: {e}")
@@ -122,11 +125,11 @@ def unarchive_call(call_id):
 def delete_call(call_id):
 
     try:
-        success = call_service.delete_call(call_id)
+        success, error = call_service.delete_call(call_id)
 
         if not success:
-            return _error_response("Failed to delete call.", 404)
-        return _success_response({"message": "Call deleted successfully."})
+            return _error_response(error, 404)
+        return _success_response({"message": "Call deleted successfully."}, 200)
 
     except Exception as e:
         logger.error(f"Error occurred while deleting call with ID {call_id}: {e}")
